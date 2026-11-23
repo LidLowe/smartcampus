@@ -1,5 +1,5 @@
 import { describe, expect, it } from 'vitest';
-import { checkAvailability, type Booking, type Room } from './availability';
+import { checkAvailability, minutesToLabel, type Booking, type Room } from './availability';
 
 const rooms: Room[] = [
   { id: 'open', name: 'A-101', building: 'Engineering Block', capacity: 40, blocked: false },
@@ -77,6 +77,30 @@ describe('checkAvailability', () => {
   it('allows an interval that starts exactly when a booking ends', () => {
     const result = check('open', 660, 720);
     expect(result.available).toBe(true);
+  });
+
+  it('labels midnight at 0 minutes as 12:00 AM', () => {
+    expect(minutesToLabel(0)).toBe('12:00 AM');
+  });
+
+  it('labels noon at 720 minutes as 12:00 PM', () => {
+    expect(minutesToLabel(720)).toBe('12:00 PM');
+  });
+
+  it('labels the valid 1440-minute endpoint as 12:00 AM, not 12:00 PM', () => {
+    expect(minutesToLabel(1440)).toBe('12:00 AM');
+  });
+
+  it('accepts an otherwise valid interval ending exactly at 24:00 and labels it 12:00 AM', () => {
+    const result = check('other', 1380, 1440);
+    expect(result.available).toBe(true);
+    expect(result.reason).toContain('12:00 AM');
+  });
+
+  it('rejects an interval ending at 1441 minutes', () => {
+    const result = check('other', 1380, 1441);
+    expect(result.available).toBe(false);
+    expect(result.reason).toContain('[AC1] Invalid interval');
   });
 
   it('does not modify rooms or bookings', () => {

@@ -23,7 +23,7 @@ export const DAY_END_MINUTES = 1440;
 export const MAX_BOOKING_MINUTES = 120;
 
 export function minutesToLabel(min: number): string {
-  const h = Math.floor(min / 60);
+  const h = min === DAY_END_MINUTES ? 0 : Math.floor(min / 60);
   const m = min % 60;
   const period = h < 12 ? 'AM' : 'PM';
   const displayH = h === 0 ? 12 : h > 12 ? h - 12 : h;
