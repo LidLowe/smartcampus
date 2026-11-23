@@ -116,12 +116,13 @@ function App() {
 
               {/* Current time */}
               <div className="mb-5">
-                <label className="block text-sm font-medium text-slate-700 mb-1.5 flex items-center gap-1.5">
+                <label htmlFor="current-time" className="block text-sm font-medium text-slate-700 mb-1.5 flex items-center gap-1.5">
                   <CalendarClock className="w-4 h-4 text-slate-400" />
                   Current Time
                 </label>
                 <div className="flex items-center gap-3">
                   <input
+                    id="current-time"
                     type="time"
                     value={minutesToTimeInput(currentTime)}
                     onChange={(e) => {
@@ -186,11 +187,12 @@ function App() {
               {/* Time inputs */}
               <div className="grid grid-cols-1 sm:grid-cols-2 gap-4 mb-6">
                 <div>
-                  <label className="block text-sm font-medium text-slate-700 mb-1.5 flex items-center gap-1.5">
+                  <label htmlFor="start-time" className="block text-sm font-medium text-slate-700 mb-1.5 flex items-center gap-1.5">
                     <Clock className="w-4 h-4 text-slate-400" />
                     Start Time
                   </label>
                   <input
+                    id="start-time"
                     type="time"
                     value={startStr}
                     onChange={(e) => {
@@ -201,11 +203,12 @@ function App() {
                   />
                 </div>
                 <div>
-                  <label className="block text-sm font-medium text-slate-700 mb-1.5 flex items-center gap-1.5">
+                  <label htmlFor="end-time" className="block text-sm font-medium text-slate-700 mb-1.5 flex items-center gap-1.5">
                     <Clock className="w-4 h-4 text-slate-400" />
                     End Time
                   </label>
                   <input
+                    id="end-time"
                     type="time"
                     value={endStr}
                     onChange={(e) => {
@@ -235,7 +238,8 @@ function App() {
               </div>
 
               {/* Result */}
-              {result && (
+              <div role="status" aria-atomic="true">
+                {result && (
                 <div
                   className={`mt-5 p-4 rounded-xl border-2 flex items-start gap-3 transition-opacity duration-200 ${
                     result.available
@@ -265,7 +269,8 @@ function App() {
                     </p>
                   </div>
                 </div>
-              )}
+                )}
+              </div>
             </div>
 
             {/* Constraints info */}
