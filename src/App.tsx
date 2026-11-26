@@ -1,4 +1,5 @@
-import { useState, useMemo } from 'react';
+import { useState, useMemo, useEffect } from 'react';
+import Practice12 from '@/Practice12';
 import {
   Building2,
   Clock,
@@ -16,6 +17,16 @@ import {
   type CheckResult,
   type Room,
 } from '@/lib/availability';
+
+function useHashRoute(): string {
+  const [hash, setHash] = useState<string>(() => window.location.hash);
+  useEffect(() => {
+    const onHashChange = () => setHash(window.location.hash);
+    window.addEventListener('hashchange', onHashChange);
+    return () => window.removeEventListener('hashchange', onHashChange);
+  }, []);
+  return hash;
+}
 
 // ---------- Sample data ----------
 
@@ -39,6 +50,7 @@ const SAMPLE_BOOKINGS: Booking[] = [
 // ---------- Component ----------
 
 function App() {
+  const hash = useHashRoute();
   const [rooms] = useState<Room[]>(SAMPLE_ROOMS);
   const [bookings] = useState<Booking[]>(SAMPLE_BOOKINGS);
 
@@ -86,6 +98,10 @@ function App() {
     setEndStr('');
     setResult(null);
   };
+
+  if (hash === '#practice-12') {
+    return <Practice12 />;
+  }
 
   return (
     <div className="min-h-screen bg-slate-50 text-slate-800">
